@@ -21,3 +21,14 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
+
+# Using admin page.
+https://docs.djangoproject.com/en/2.2/ref/contrib/admin/
+1. Create super user for admin page with using:
+```bash
+python manage.py createsuperuser
+```
+2. Access to admin page.
+```bash
+access to this URl. http://localhost:8000/admin/
+```
