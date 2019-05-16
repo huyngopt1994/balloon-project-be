@@ -2,10 +2,12 @@ from django.db import models
 
 
 # Create your models here.
-class Users(models.Model):
+class Companies(models.Model):
     name = models.CharField(max_length=255)
     telephone = models.IntegerField()
     tax_number = models.IntegerField()
+    contact_name = models.CharField(max_length=255)
+    logo = models.ImageField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -31,6 +33,6 @@ class Transactions(models.Model):
     transport_fee = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    discount = models.ForeignKey(Discounts, on_delete=models.CASCADE)
+    company = models.ForeignKey(Companies, on_delete=models.CASCADE, null=False)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=False)
+    discount = models.ForeignKey(Discounts, on_delete=models.CASCADE, null=False)
