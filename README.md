@@ -1,7 +1,9 @@
 # balloon-project-be
 Using:
 1. Django
-2. Django-ViewSet
+2. Django-RestFrameWork(View Set)
+
+https://www.django-rest-framework.org/tutorial/1-serialization/
 
 
 # Steps for working with current project
@@ -32,3 +34,4 @@ python manage.py createsuperuser
 ```bash
 access to this URl. http://localhost:8000/admin/
 ```
+
