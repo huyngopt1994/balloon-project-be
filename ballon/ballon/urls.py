@@ -49,14 +49,22 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Companies.objects.all()
     serializer_class = CompanySerializer
 
+
 class TransactionSerizalier(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transactions
-        fields = ('total', )
+        fields = ('total', 'type', 'transport_fee', 'created_at', 'updated_at', 'price')
+
+
+class TransactionViewSet(viewsets.ModelViewSet):
+    queryset = Transactions.objects.all()
+    serializer_class = TransactionSerizalier
+
 
 router = routers.DefaultRouter()
 router.register(r'products', ProductViewSet)
 router.register(r'admin/company', CompanyViewSet)
+router.register(r'admin/transaction', TransactionViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     path('admin/', admin.site.urls),
