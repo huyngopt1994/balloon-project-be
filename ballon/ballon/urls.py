@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers, serializers, viewsets
 
-from web_source.models import Products
+from web_source.models import Products, Companies, Transactions
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
@@ -39,8 +39,24 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
 
 
+class CompanySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Companies
+        fields = ('name', 'telephone', 'tax_number', 'contact_name', 'logo', 'created_at', 'updated_at')
+
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Companies.objects.all()
+    serializer_class = CompanySerializer
+
+class TransactionSerizalier(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Transactions
+        fields = ('total', )
+
 router = routers.DefaultRouter()
 router.register(r'products', ProductViewSet)
+router.register(r'admin/company', CompanyViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     path('admin/', admin.site.urls),

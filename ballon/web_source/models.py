@@ -13,7 +13,6 @@ class Companies(models.Model):
 
 
 class Products(models.Model):
-    price = models.IntegerField()
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     image = models.ImageField()
@@ -28,11 +27,19 @@ class Discounts(models.Model):
 
 
 class Transactions(models.Model):
+    NORMAL_TYPE = 'NT'
+    RED_TYPE = 'RT'
+    TYPE_TRANSACTIONS_CHOICES = [
+        (NORMAL_TYPE, 'Normaltype'),
+        (RED_TYPE, 'Redtype')
+
+    ]
     total = models.IntegerField()
-    type = models.CharField(max_length=255)
+    type = models.CharField(max_length=2, choices=TYPE_TRANSACTIONS_CHOICES, default=NORMAL_TYPE)
     transport_fee = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     company = models.ForeignKey(Companies, on_delete=models.CASCADE, null=False)
     product = models.ForeignKey(Products, on_delete=models.CASCADE, null=False)
     discount = models.ForeignKey(Discounts, on_delete=models.CASCADE, null=False)
+    price = models.IntegerField(default=0)
