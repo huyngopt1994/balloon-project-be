@@ -35,3 +35,6 @@ python manage.py createsuperuser
 access to this URl. http://localhost:8000/admin/
 ```
 
+# Apply JWT for securing 
+https://simpleisbetterthancomplex.com/tutorial/2018/12/19/how-to-use-jwt-authentication-with-django-rest-framework.html
+
