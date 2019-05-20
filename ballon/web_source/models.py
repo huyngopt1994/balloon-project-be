@@ -4,10 +4,10 @@ from django.db import models
 # Create your models here.
 class Companies(models.Model):
     name = models.CharField(max_length=255)
-    telephone = models.IntegerField()
-    tax_number = models.IntegerField()
+    telephone = models.CharField(max_length=255)
+    tax_number = models.CharField(max_length=255)
     contact_name = models.CharField(max_length=255)
-    logo = models.ImageField()
+    logo = models.ImageField(null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -15,7 +15,7 @@ class Companies(models.Model):
 class Products(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
-    image = models.ImageField()
+    image = models.ImageField(null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

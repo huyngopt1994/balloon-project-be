@@ -24,7 +24,7 @@ from web_source.models import Products, Companies, Transactions
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Products
-        fields = ('price', 'name', 'description', 'image')
+        fields = ('id', 'price', 'name', 'description', 'image')
 
 
 # ViewSets define the view behavior.
@@ -42,7 +42,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Companies
-        fields = ('name', 'telephone', 'tax_number', 'contact_name', 'logo', 'created_at', 'updated_at')
+        fields = ('id', 'name', 'telephone', 'tax_number', 'contact_name', 'logo', 'created_at', 'updated_at')
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -53,7 +53,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
 class TransactionSerizalier(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transactions
-        fields = ('total', 'type', 'transport_fee', 'created_at', 'updated_at', 'price')
+        fields = ('id', 'total', 'type', 'transport_fee', 'created_at', 'updated_at', 'price')
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
