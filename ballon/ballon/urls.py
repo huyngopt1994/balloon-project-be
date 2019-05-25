@@ -27,7 +27,7 @@ from ballon import settings
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Products
-        fields = ('id', 'name', 'description', 'image')
+        fields = ('id', 'name', 'description', 'image', 'created_at', 'updated_at')
 
 
 # ViewSets define the view behavior.
@@ -56,7 +56,8 @@ class CompanyViewSet(viewsets.ModelViewSet):
 class TransactionSerizalier(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transactions
-        fields = ('id', 'total', 'type', 'transport_fee', 'created_at', 'updated_at', 'price')
+        fields = ('id', 'total', 'type', 'transport_fee', 'created_at', 'updated_at', 'price', 'product')
+        depth = 1
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
