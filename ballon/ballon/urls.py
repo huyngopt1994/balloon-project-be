@@ -65,7 +65,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
 
 router = routers.DefaultRouter()
-router.register(r'products', ProductViewSet)
+router.register(r'product', ProductViewSet)
 router.register(r'admin/company', CompanyViewSet)
 router.register(r'admin/transaction', TransactionViewSet)
 urlpatterns = [
