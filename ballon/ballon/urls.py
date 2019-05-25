@@ -24,7 +24,7 @@ from web_source.models import Products, Companies, Transactions
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Products
-        fields = ('id', 'price', 'name', 'description', 'image')
+        fields = ('id', 'name', 'description', 'image')
 
 
 # ViewSets define the view behavior.
