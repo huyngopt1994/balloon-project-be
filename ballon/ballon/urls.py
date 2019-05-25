@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers, serializers, viewsets
+from rest_framework import routers, serializers, viewsets, filters
 
 from web_source.models import Products, Companies, Transactions
 
@@ -40,6 +40,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     queryset = Products.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('name',)
+    ordering_fields = ('created_at', 'updated_at', 'name')
 
 
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
@@ -51,6 +54,9 @@ class CompanySerializer(serializers.HyperlinkedModelSerializer):
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Companies.objects.all()
     serializer_class = CompanySerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('name',)
+    ordering_fields = ('created_at', 'updated_at', 'name')
 
 
 class TransactionSerizalier(serializers.HyperlinkedModelSerializer):
