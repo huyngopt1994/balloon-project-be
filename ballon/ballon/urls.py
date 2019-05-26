@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers, serializers, viewsets, filters
 
-from web_source.models import Products, Companies, Transactions
+from web_source.models import Products, Companies, Transactions, TransactionProducts
 
 from ballon import settings
 
@@ -49,7 +49,15 @@ class CompanySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Companies
         fields = (
-        'id', 'name', 'telephone', 'tax_number', 'contact_name', 'address', 'logo', 'created_at', 'updated_at')
+            'id', 'name', 'telephone', 'tax_number', 'contact_name', 'address', 'logo', 'created_at', 'updated_at')
+
+
+class ShortCompanySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Companies
+        fields = (
+            'id', 'name'
+        )
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -60,16 +68,29 @@ class CompanyViewSet(viewsets.ModelViewSet):
     ordering_fields = ('created_at', 'updated_at', 'name')
 
 
-class TransactionSerizalier(serializers.HyperlinkedModelSerializer):
+class TransactionProductsSerializer(serializers.HyperlinkedModelSerializer):
+    product_name = serializers.ReadOnlyField(source='product.name')
+
+    class Meta:
+        model = TransactionProducts
+        fields = ('id', 'total', 'price', 'total_price', 'product_id', 'product_name', 'transaction_id')
+
+
+class TransactionSerializer(serializers.HyperlinkedModelSerializer):
+    company = ShortCompanySerializer()
+    transaction_products = TransactionProductsSerializer(source='transactionproducts_set', many=True)
+
     class Meta:
         model = Transactions
-        fields = ('id', 'total', 'type', 'transport_fee', 'created_at', 'updated_at', 'price', 'product')
+        fields = ('id', 'type', 'transport_fee', 'created_at', 'updated_at', 'company',
+                  'transaction_products', 'signed_name', 'total_price_before_vat', 'total_price_after_vat')
+
         depth = 1
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transactions.objects.all()
-    serializer_class = TransactionSerizalier
+    serializer_class = TransactionSerializer
 
 
 router = routers.DefaultRouter()

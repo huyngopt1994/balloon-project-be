@@ -21,12 +21,6 @@ class Products(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Discounts(models.Model):
-    percentage = models.IntegerField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
 class Transactions(models.Model):
     NORMAL_TYPE = 'NT'
     RED_TYPE = 'RT'
@@ -35,12 +29,20 @@ class Transactions(models.Model):
         (RED_TYPE, 'Redtype')
 
     ]
-    total = models.IntegerField()
     type = models.CharField(max_length=2, choices=TYPE_TRANSACTIONS_CHOICES, default=NORMAL_TYPE)
     transport_fee = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    company = models.ForeignKey(Companies, on_delete=models.CASCADE, null=False)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=False)
-    discount = models.ForeignKey(Discounts, on_delete=models.CASCADE, null=False)
-    price = models.IntegerField(default=0)
+    company = models.ForeignKey(Companies, on_delete=models.PROTECT, null=False)
+    transaction_products = models.ManyToManyField(Products, through='TransactionProducts')
+    signed_name = models.CharField(max_length=255, default='')
+    total_price_before_vat = models.IntegerField(default=0)
+    total_price_after_vat = models.IntegerField(default=0)
+
+
+class TransactionProducts(models.Model):
+    product = models.ForeignKey(Products, on_delete=models.PROTECT)
+    transaction = models.ForeignKey(Transactions, on_delete=models.PROTECT)
+    total = models.IntegerField()
+    price = models.IntegerField()
+    total_price = models.IntegerField()
