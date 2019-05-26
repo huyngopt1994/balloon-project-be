@@ -48,7 +48,8 @@ class ProductViewSet(viewsets.ModelViewSet):
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Companies
-        fields = ('id', 'name', 'telephone', 'tax_number', 'contact_name', 'logo', 'created_at', 'updated_at')
+        fields = (
+        'id', 'name', 'telephone', 'tax_number', 'contact_name', 'address', 'logo', 'created_at', 'updated_at')
 
 
 class CompanyViewSet(viewsets.ModelViewSet):

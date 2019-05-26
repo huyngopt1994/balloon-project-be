@@ -7,6 +7,7 @@ class Companies(models.Model):
     telephone = models.CharField(max_length=255)
     tax_number = models.CharField(max_length=255)
     contact_name = models.CharField(max_length=255)
+    address = models.TextField(default='')
     logo = models.ImageField(null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
