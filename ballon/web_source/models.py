@@ -1,4 +1,5 @@
 from django.db import models
+from django_countries.fields import CountryField
 
 
 # Create your models here.
@@ -8,6 +9,7 @@ class Companies(models.Model):
     tax_number = models.CharField(max_length=255)
     contact_name = models.CharField(max_length=255)
     address = models.TextField(default='')
+    country = CountryField(null=True, blank=True)
     logo = models.ImageField(null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

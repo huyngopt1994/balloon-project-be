@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'web_source.apps.WebSourceConfig',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_countries'
 
 ]
 

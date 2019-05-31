@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django_countries.serializers import CountryFieldMixin
 from rest_framework import routers, serializers, viewsets, filters
 
 from web_source.models import Products, Companies, Transactions, TransactionProducts
@@ -24,10 +25,10 @@ from web_source.models import Products, Companies, Transactions, TransactionProd
 from ballon import settings
 
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
-        fields = ('id', 'name', 'description', 'image', 'created_at', 'updated_at')
+        fields = '__all__'
 
 
 # ViewSets define the view behavior.
@@ -45,19 +46,19 @@ class ProductViewSet(viewsets.ModelViewSet):
     ordering_fields = ('created_at', 'updated_at', 'name')
 
 
-class CompanySerializer(serializers.HyperlinkedModelSerializer):
+class CompanySerializer(CountryFieldMixin, serializers.ModelSerializer):
     class Meta:
         model = Companies
-        fields = (
-            'id', 'name', 'telephone', 'tax_number', 'contact_name', 'address', 'logo', 'created_at', 'updated_at')
+        fields = '__all__'
 
 
-class ShortCompanySerializer(serializers.HyperlinkedModelSerializer):
+class ShortCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Companies
         fields = (
             'id', 'name'
         )
+        read_only_fields = ('name',)
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -68,25 +69,48 @@ class CompanyViewSet(viewsets.ModelViewSet):
     ordering_fields = ('created_at', 'updated_at', 'name')
 
 
-class TransactionProductsSerializer(serializers.HyperlinkedModelSerializer):
+class TransactionProductsSerializer(serializers.ModelSerializer):
     product_name = serializers.ReadOnlyField(source='product.name')
+    product_id = serializers.IntegerField(source='product.id')
 
     class Meta:
         model = TransactionProducts
         fields = ('id', 'total', 'price', 'total_price', 'product_id', 'product_name', 'transaction_id')
+        read_only_fields = ('product_name', 'id')
 
 
-class TransactionSerializer(serializers.HyperlinkedModelSerializer):
-    company = ShortCompanySerializer()
+class TransactionSerializer(serializers.ModelSerializer):
+    company = ShortCompanySerializer(read_only=True)
+    company_id = serializers.CharField(source='company.id')
     transaction_products = TransactionProductsSerializer(source='transactionproducts_set', many=True)
 
     class Meta:
         model = Transactions
         fields = ('id', 'type', 'transport_fee', 'created_at', 'updated_at', 'company',
-                  'transaction_products', 'signed_name', 'total_price_before_vat', 'total_price_after_vat')
+                  'transaction_products', 'signed_name', 'total_price_before_vat', 'total_price_after_vat',
+                  'company_id')
 
         depth = 1
 
+    def create(self, validated_data):
+        transaction_products = validated_data.pop('transactionproducts_set')
+
+        company_instance = Companies.objects.get(pk=int(validated_data['company']['id']))
+        validated_data.update({'company': company_instance})
+        transaction_instance = Transactions.objects.create(**validated_data)
+        for transaction_product in transaction_products:
+            product = transaction_product.pop('product')
+            product_instance = Products.objects.get(pk=int(product['id']))
+            data = {
+                'total': transaction_product['total'],
+                'price': transaction_product['price'],
+                'total_price': transaction_product['total_price'],
+                'product': product_instance,
+                'transaction': transaction_instance
+
+            }
+            TransactionProducts.objects.create(**data)
+        return transaction_instance
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transactions.objects.all()
