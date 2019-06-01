@@ -11,6 +11,8 @@ psycopg2-binary = "*"
 pillow = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+django-filter = "*"
+django-countries = "*"
 
 [requires]
 python_version = "3.7"

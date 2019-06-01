@@ -38,3 +38,5 @@ access to this URl. http://localhost:8000/admin/
 # Apply JWT for securing 
 https://simpleisbetterthancomplex.com/tutorial/2018/12/19/how-to-use-jwt-authentication-with-django-rest-framework.html
 
+# Apply Filtering, Searching, Sorting for Django-ViewSet
+https://www.django-rest-framework.org/api-guide/filtering/#searchfilter
