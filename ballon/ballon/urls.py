@@ -56,9 +56,9 @@ class ShortCompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Companies
         fields = (
-            'id', 'name'
+            'id', 'name', 'address', 'contact_name'
         )
-        read_only_fields = ('name',)
+        read_only_fields = ('name', 'address', 'contact_name')
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -112,7 +112,15 @@ class TransactionSerializer(serializers.ModelSerializer):
             TransactionProducts.objects.create(**data)
         return transaction_instance
 
+
 class TransactionViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        company_filter = self.request.query_params.get('company')
+        queryset = super(TransactionViewSet, self).get_queryset()
+        if company_filter:
+            queryset = Transactions.objects.filter(company__name__icontains=company_filter)
+        return queryset
+
     queryset = Transactions.objects.all()
     serializer_class = TransactionSerializer
 
