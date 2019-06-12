@@ -6,6 +6,7 @@ from django_countries.fields import CountryField
 class Companies(models.Model):
     name = models.CharField(max_length=255)
     telephone = models.CharField(max_length=255)
+    work_phone = models.CharField(max_length=255, default='')
     tax_number = models.CharField(max_length=255)
     contact_name = models.CharField(max_length=255)
     address = models.TextField(default='')
@@ -40,6 +41,7 @@ class Transactions(models.Model):
     signed_name = models.CharField(max_length=255, default='')
     total_price_before_vat = models.IntegerField(default=0)
     total_price_after_vat = models.IntegerField(default=0)
+    address_transport = models.TextField(default='')
 
 
 class TransactionProducts(models.Model):

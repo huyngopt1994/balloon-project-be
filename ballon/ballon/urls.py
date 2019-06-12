@@ -116,13 +116,17 @@ class TransactionSerializer(serializers.ModelSerializer):
 class TransactionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         company_filter = self.request.query_params.get('company')
+        order_filter = self.request.query_params.get('ordering')
         queryset = super(TransactionViewSet, self).get_queryset()
         if company_filter:
             queryset = Transactions.objects.filter(company__name__icontains=company_filter)
+        if order_filter:
+            queryset = queryset.order_by(order_filter)
         return queryset
 
     queryset = Transactions.objects.all()
     serializer_class = TransactionSerializer
+    ordering_fields = ('created_at', 'updated_at')
 
 
 router = routers.DefaultRouter()
