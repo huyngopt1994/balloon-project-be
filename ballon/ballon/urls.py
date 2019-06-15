@@ -65,7 +65,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Companies.objects.all()
     serializer_class = CompanySerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    search_fields = ('name',)
+    search_fields = ('name', 'tax_number')
     ordering_fields = ('created_at', 'updated_at', 'name')
 
 
