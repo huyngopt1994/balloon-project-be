@@ -88,7 +88,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transactions
         fields = ('id', 'type', 'transport_fee', 'created_at', 'updated_at', 'company',
                   'transaction_products', 'signed_name', 'total_price_before_vat', 'total_price_after_vat',
-                  'company_id')
+                  'company_id', 'address_transport')
 
         depth = 1
 
